@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut,  onAuthStateChanged  } from "firebase/auth";
-import { getDatabase, ref, get, set, remove } from "firebase/database";
+import { getDatabase, ref, get, set, remove} from "firebase/database";
 import { v4 as uuid } from 'uuid'; 
+import moment from 'moment';
+
 
 
 const firebaseConfig = {
@@ -100,4 +102,22 @@ export async function getCart(userId) {
     return remove(ref(database, `reviews/${productId}/${userId}`));
   }
 
+  export async function addOrUpdateToMessage(user, message) {
+    const date = Date.now();
+    const formattedDate = moment(date).format('YYYYMMDDhhmmss');
+
+    return set(ref(database, `messages/${user.uid}/${formattedDate}`), 
+    {userId: user.uid, image: user.photoURL, message, createdAt: formattedDate})
+      
+    
+  }
   
+  export async function getMessages(userId) {
+    return get(ref(database, `messages/${userId}`))
+    .then((snapshot) => {
+      if(snapshot.exists()) {
+        return Object.values(snapshot.val()); 
+    }
+    return []; 
+    })
+  }
