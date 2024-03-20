@@ -11,7 +11,7 @@ function SmallBox() {
   return (
     <div className=' bg-orange-500 sticky bottom-3 float-right rounded-md p-2'>
         <div className='relative'>
-            {open && <>{ messages && <MessageCard messages={messages}/>}</>}
+            {open &&  <MessageCard key={messages.createdAt} messages={messages}/> }
             <div className='flex flex-row justify-items-center content-center'>
                 <AiFillMessage className='text-3xl text-white'/>
                 <button className='text-1xl font-bold ml-3 text-white hover:scale-110' 
